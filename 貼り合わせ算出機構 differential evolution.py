@@ -42,13 +42,13 @@ tosRGB = [
     ]
 
 ## dataファイル(光路差100付近:基準)におけるファイルpass/2024.1.16^F 光路差の精密測定(Excel)より算出/**より精確なdata必要
-file_name = "data/data_d_100.csv"
+file_name = "python-lamination-calculation-mechanism-main/data/data_d_100.csv"
 # dataファイル(光源:白色LED光源)におけるファイルpass
-file_name_light = "data/data_light_iphone13mini.csv"
+file_name_light = "python-lamination-calculation-mechanism-main/date/data_light_iphone13mini.csv"
 # dataファイル(補正データ:C2)におけるファイルpass
-file_name_correct = "data/R.csv"
+file_name_correct = "python-lamination-calculation-mechanism-main/data/R.csv"
 # dataファイル(等色関数 row[１]=x(λ),row[2]=y(λ),rao[3]=z(λ))におけるファイルpass
-file_name_color_f = "data/data_e_color.csv"
+file_name_color_f = "python-lamination-calculation-mechanism-main/data/data_e_color.csv"
 
 
 # 光路差(with open関数による，基準(100nm 付近)の光路差のinstal
@@ -1290,6 +1290,7 @@ update_plot()
 
 root.mainloop()
 print("ウィンドウを閉じました")
+
 
 
 
