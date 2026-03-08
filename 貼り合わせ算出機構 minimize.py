@@ -603,7 +603,7 @@ def correctional_rgb(rgbnow,light_opt,light_s):
     ax3.set_title(f"H-{theta_pi_str} - S-{arr_S:.2f} - V-{arr_V:.2f}", fontname="Arial", fontsize=20)  # グラフタイトル
     #グラフに円を描写する(ec = edge color)
     c = patches.Circle(xy=(0, 0), radius=1.0,fill=False, ec='r')
-    img = plt.imread("hsv_wheel_transparent.png")
+    img = plt.imread("python-lamination-calculation-mechanism-main/hsv_wheel_transparent.png")
     ax3.imshow(img, extent=[-1, 1, -1, 1], alpha=0.6, zorder=0)
     # グラフに円を追加する．
     ax3.add_patch(c)
@@ -778,7 +778,7 @@ def gauss_HSV2(rgbgauss,light_opt,light_s):
     ax3.set_title(f"H-{theta_pi_str} - S-{arr_S:.2f} - V-{arr_V:.2f}", fontname="Arial", fontsize=20)  # グラフタイトル
     #グラフに円を描写する(ec = edge color)
     c = patches.Circle(xy=(0, 0), radius=1.0,fill=False, ec='r')
-    img = plt.imread("hsv_wheel_transparent.png")
+    img = plt.imread("python-lamination-calculation-mechanism-main/hsv_wheel_transparent.png")
     ax3.imshow(img, extent=[-1, 1, -1, 1], alpha=0.6, zorder=0)
     # グラフに円を追加する．
     ax3.add_patch(c)
@@ -1275,6 +1275,7 @@ update_plot()
 
 root.mainloop()
 print("ウィンドウを閉じました")
+
 
 
 
