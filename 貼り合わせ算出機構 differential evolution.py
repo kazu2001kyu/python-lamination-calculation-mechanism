@@ -346,7 +346,7 @@ def fitting():
             #2.強度配列に光源データ配列を積した測定直交スペクトルを算出　
             #3.補正データを積した補正測定直交配置スペクトルを算出
             spc = I*(spN[l-380])
-            spcλ = float(spc)
+            spcλ = spc.item()
             spcA.append(spcλ)
         
         #用意したスペクトルdataの型をlistからarrayへ変更
@@ -435,7 +435,7 @@ def fitting():
     objective,
     bounds,
     strategy='best1bin',
-    maxiter=1000,  # 最大世代数
+    maxiter=10,  # 最大世代数
     popsize=15,    # 集団サイズ
     tol=1e-6,      # 収束判定
     mutation=(0.5, 1),
@@ -922,9 +922,9 @@ def fitting_color(keepparams):
         cfX = array_cfx[l - 380]
         cfY = array_cfy[l - 380]
         cfZ = array_cfz[l - 380]
-        spcX += float(spc * cfX * K)
-        spcY += float(spc * cfY * K)
-        spcZ += float(spc * cfZ * K)
+        spcX += (spc * cfX * K).item()
+        spcY += (spc * cfY * K).item()
+        spcZ += (spc * cfZ * K).item()
     
     arr_spcX = spcX #座標の配列(等色関数)について，積の総和を代入
     arr_spcY = spcY
@@ -1290,7 +1290,6 @@ update_plot()
 
 root.mainloop()
 print("ウィンドウを閉じました")
-
 
 
 
