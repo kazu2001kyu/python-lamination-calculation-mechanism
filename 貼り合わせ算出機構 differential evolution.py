@@ -42,13 +42,13 @@ tosRGB = [
     ]
 
 ## dataファイル(光路差100付近:基準)におけるファイルpass/2024.1.16^F 光路差の精密測定(Excel)より算出/**より精確なdata必要
-file_name = "python-lamination-calculation-mechanism-main/data/data_d_100.csv"
+file_name = "data/data_d_100.csv"
 # dataファイル(光源:白色LED光源)におけるファイルpass
-file_name_light = "python-lamination-calculation-mechanism-main/data/data_light_iphone13mini.csv"
+file_name_light = "data/data_light_iphone13mini.csv"
 # dataファイル(補正データ:C2)におけるファイルpass
-file_name_correct = "python-lamination-calculation-mechanism-main/data/R.csv"
+file_name_correct = "data/R.csv"
 # dataファイル(等色関数 row[１]=x(λ),row[2]=y(λ),rao[3]=z(λ))におけるファイルpass
-file_name_color_f = "python-lamination-calculation-mechanism-main/data/data_e_color.csv"
+file_name_color_f = "data/data_e_color.csv"
 
 
 # 光路差(with open関数による，基準(100nm 付近)の光路差のinstal
@@ -618,7 +618,7 @@ def correctional_rgb(rgbnow,light_opt,light_s):
     ax3.set_title(f"H-{theta_pi_str} - S-{arr_S:.2f} - V-{arr_V:.2f}", fontname="Arial", fontsize=20)  # グラフタイトル
     #グラフに円を描写する(ec = edge color)
     c = patches.Circle(xy=(0, 0), radius=1.0,fill=False, ec='r')
-    img = plt.imread("python-lamination-calculation-mechanism-main/hsv_wheel_transparent.png")
+    img = plt.imread("hsv_wheel_transparent.png")
     ax3.imshow(img, extent=[-1, 1, -1, 1], alpha=0.6, zorder=0)
     # グラフに円を追加する．
     ax3.add_patch(c)
@@ -793,7 +793,7 @@ def gauss_HSV2(rgbgauss,light_opt,light_s):
     ax3.set_title(f"H-{theta_pi_str} - S-{arr_S:.2f} - V-{arr_V:.2f}", fontname="Arial", fontsize=20)  # グラフタイトル
     #グラフに円を描写する(ec = edge color)
     c = patches.Circle(xy=(0, 0), radius=1.0,fill=False, ec='r')
-    img = plt.imread("python-lamination-calculation-mechanism-main/hsv_wheel_transparent.png")
+    img = plt.imread("hsv_wheel_transparent.png")
     ax3.imshow(img, extent=[-1, 1, -1, 1], alpha=0.6, zorder=0)
     # グラフに円を追加する．
     ax3.add_patch(c)
@@ -1290,6 +1290,7 @@ update_plot()
 
 root.mainloop()
 print("ウィンドウを閉じました")
+
 
 
 
