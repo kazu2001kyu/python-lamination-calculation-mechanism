@@ -32,8 +32,9 @@ mpl.rcParams.update({
 # 計算のステップ間隔
 step = 5
 
-# 三刺激値におけるK定数(検討必)
-K = 5.279886888
+# 三刺激値におけるK定数(宣言)
+K=0
+
 # R"G"B"計算時に使用する，sRGB変換マトリクス．
 tosRGB = [
         [3.2406, -1.5372, -0.4986],
@@ -42,13 +43,13 @@ tosRGB = [
     ]
 
 ## dataファイル(光路差100付近:基準)におけるファイルpass/2024.1.16^F 光路差の精密測定(Excel)より算出/**より精確なdata必要
-file_name = "data/data_d_100.csv"
+file_name = "python-lamination-calculation-mechanism-main/data/data_d_100.csv"
 # dataファイル(光源:白色LED光源)におけるファイルpass
-file_name_light = "data/data_light_iphone13mini.csv"
+file_name_light = "python-lamination-calculation-mechanism-main/data/data_light_iphone13mini.csv"
 # dataファイル(補正データ:C2)におけるファイルpass
-file_name_correct = "data/R.csv"
+file_name_correct = "python-lamination-calculation-mechanism-main/data/R.csv"
 # dataファイル(等色関数 row[１]=x(λ),row[2]=y(λ),rao[3]=z(λ))におけるファイルpass
-file_name_color_f = "data/data_e_color.csv"
+file_name_color_f = "python-lamination-calculation-mechanism-main/data/data_e_color.csv"
 
 
 # 光路差(with open関数による，基準(100nm 付近)の光路差のinstal
@@ -180,6 +181,10 @@ Nspcfx = [num/max_cfx  for num in array_cfx]
 Nspcfy = [num/max_cfy  for num in array_cfy]
 Nspcfz = [num/max_cfz  for num in array_cfz]
 
+#[k定数について]___________________________________________________________________________________________
+for i in range(380,751): #各λにおける値の算出
+        K += float((array_ll[i-380]*array_cfy[i-380]))
+K = 1.0/ K # 光源の際の値を基準として,Y=1とする
 
 # ガウス関数
 def gauss(x, A, mu, sigma):
@@ -435,7 +440,7 @@ def fitting():
     objective,
     bounds,
     strategy='best1bin',
-    maxiter=10,  # 最大世代数
+    maxiter=5,  # 最大世代数(何回繰り返すか、以下変更可能)
     popsize=15,    # 集団サイズ
     tol=1e-6,      # 収束判定
     mutation=(0.5, 1),
@@ -566,38 +571,38 @@ def correctional_rgb(rgbnow,light_opt,light_s):
     #RGBの受け取り
     r,g,b = rgbnow
     #辞書の作成
-    d = {'R':r,'G':g,'B':b}
+    #d = {'R':r,'G':g,'B':b}
     #RGBのうちどれが最大化がどれかを参照(同値255,255,255の場合は最初の値..?)
-    getlarge=max(d, key=d.get)  #
-    getlargeRGB=max([r,g,b])
-    if getlarge=='R':
-        for i in range(380,751): #各λにおける光路差d対応とジョーンズ・マトリクス計算
-            sumR_opt+=light_opt[i-380]*Nspcfx[i-380]
-            sumR_ls+=light_s[i-380]*Nspcfx[i-380]
-        ratio = (sumR_opt**(1/2.4))/(sumR_ls**(1/2.4))
-        print("sumR_opt"+str(sumR_opt))
-        print("sumR_ls"+str(sumR_ls))
-    elif getlarge=='G':
-        for i in range(380,751): #各λにおける光路差d対応とジョーンズ・マトリクス計算
-            sumG_opt+=light_opt[i-380]*Nspcfy[i-380]
-            sumG_ls+=light_s[i-380]*Nspcfy[i-380]
-        ratio = (sumG_opt**(1/2.4))/(sumG_ls**(1/2.4))
-        print("sumG_opt"+str(sumG_opt))
-        print("sumG_ls"+str(sumG_ls))
-    else :
-        for i in range(380,751): #各λにおける光路差d対応とジョーンズ・マトリクス計算
-            sumB_opt+=light_opt[i-380]*Nspcfz[i-380]
-            sumB_ls+=light_s[i-380]*Nspcfz[i-380]
-        ratio = (sumB_opt**(1/2.4))/(sumB_ls**(1/2.4))
-        print("sumB_opt"+str(sumB_opt))
-        print("sumB_ls"+str(sumB_ls))
+    #getlarge=max(d, key=d.get)  #
+    #getlargeRGB=max([r,g,b])
+    #if getlarge=='R':
+    #    for i in range(380,751): #各λにおける光路差d対応とジョーンズ・マトリクス計算
+    #        sumR_opt+=light_opt[i-380]*Nspcfx[i-380]
+    #        sumR_ls+=light_s[i-380]*Nspcfx[i-380]
+    #    ratio = (sumR_opt**(1/2.4))/(sumR_ls**(1/2.4))
+    #    print("sumR_opt"+str(sumR_opt))
+    #    print("sumR_ls"+str(sumR_ls))
+    #elif getlarge=='G':
+    #    for i in range(380,751): #各λにおける光路差d対応とジョーンズ・マトリクス計算
+    #        sumG_opt+=light_opt[i-380]*Nspcfy[i-380]
+    #        sumG_ls+=light_s[i-380]*Nspcfy[i-380]
+    #    ratio = (sumG_opt**(1/2.4))/(sumG_ls**(1/2.4))
+    #    print("sumG_opt"+str(sumG_opt))
+    #    print("sumG_ls"+str(sumG_ls))
+    #else :
+    #    for i in range(380,751): #各λにおける光路差d対応とジョーンズ・マトリクス計算
+    #        sumB_opt+=light_opt[i-380]*Nspcfz[i-380]
+    #        sumB_ls+=light_s[i-380]*Nspcfz[i-380]
+    #    ratio = (sumB_opt**(1/2.4))/(sumB_ls**(1/2.4))
+    #    print("sumB_opt"+str(sumB_opt))
+    #    print("sumB_ls"+str(sumB_ls))
     
-    print("ratio-"+str(ratio))
+    #print("ratio-"+str(ratio))
 
     #ratioによるRGBの補正
-    r*=ratio
-    g*=ratio
-    b*=ratio
+    #r*=ratio
+    #g*=ratio
+    #b*=ratio
     colorsrgb=[r, g, b]
     color = [(r/255, g/255, b/255)]
     # RGB値をHSV値に変換する．
@@ -618,7 +623,7 @@ def correctional_rgb(rgbnow,light_opt,light_s):
     ax3.set_title(f"H-{theta_pi_str} - S-{arr_S:.2f} - V-{arr_V:.2f}", fontname="Arial", fontsize=20)  # グラフタイトル
     #グラフに円を描写する(ec = edge color)
     c = patches.Circle(xy=(0, 0), radius=1.0,fill=False, ec='r')
-    img = plt.imread("hsv_wheel_transparent.png")
+    img = plt.imread("python-lamination-calculation-mechanism-main/hsv_wheel_transparent.png")
     ax3.imshow(img, extent=[-1, 1, -1, 1], alpha=0.6, zorder=0)
     # グラフに円を追加する．
     ax3.add_patch(c)
@@ -688,38 +693,38 @@ def gauss_HSV(rgbgauss,light_opt,light_s):
     #RGBの受け取り
     r,g,b = rgbgauss
     #辞書の作成
-    d = {'R':r,'G':g,'B':b}
+    #d = {'R':r,'G':g,'B':b}
     #RGBのうちどれが最大化がどれかを参照(同値255,255,255の場合は最初の値..?)
-    getlarge=max(d, key=d.get)  #
+    #getlarge=max(d, key=d.get)  #
     
-    if getlarge=='R':
-        for i in range(380,751): #各λにおける光路差d対応とジョーンズ・マトリクス計算
-            sumR_opt+=light_opt[i-380]*Nspcfx[i-380]
-            sumR_ls+=light_s[i-380]*Nspcfx[i-380]
-        ratio = (sumR_opt)/(sumR_ls)
-        print("GsumR_opt"+str(sumR_opt))
-        print("GsumR_ls"+str(sumR_ls))
-    elif getlarge=='G':
-        for i in range(380,751): #各λにおける光路差d対応とジョーンズ・マトリクス計算
-            sumG_opt+=light_opt[i-380]*Nspcfy[i-380]
-            sumG_ls+=light_s[i-380]*Nspcfy[i-380]
-        ratio = (sumG_opt)/(sumG_ls)
-        print("GsumG_opt"+str(sumG_opt))
-        print("GsumG_ls"+str(sumG_ls))
-    else :
-        for i in range(380,751): #各λにおける光路差d対応とジョーンズ・マトリクス計算
-            sumB_opt+=light_opt[i-380]*Nspcfz[i-380]
-            sumB_ls+=light_s[i-380]*Nspcfz[i-380]
-        ratio = (sumB_opt)/(sumB_ls)
-        print("GsumB_opt"+str(sumB_opt))
-        print("GsumB_ls"+str(sumB_ls))
+    #if getlarge=='R':
+    #    for i in range(380,751): #各λにおける光路差d対応とジョーンズ・マトリクス計算
+    #        sumR_opt+=light_opt[i-380]*Nspcfx[i-380]
+    #        sumR_ls+=light_s[i-380]*Nspcfx[i-380]
+    #    ratio = (sumR_opt)/(sumR_ls)
+    #    print("GsumR_opt"+str(sumR_opt))
+    #    print("GsumR_ls"+str(sumR_ls))
+    #elif getlarge=='G':
+    #    for i in range(380,751): #各λにおける光路差d対応とジョーンズ・マトリクス計算
+    #        sumG_opt+=light_opt[i-380]*Nspcfy[i-380]
+    #        sumG_ls+=light_s[i-380]*Nspcfy[i-380]
+    #    ratio = (sumG_opt)/(sumG_ls)
+    #   print("GsumG_opt"+str(sumG_opt))
+    #   print("GsumG_ls"+str(sumG_ls))
+    #else :
+    #   for i in range(380,751): #各λにおける光路差d対応とジョーンズ・マトリクス計算
+    #       sumB_opt+=light_opt[i-380]*Nspcfz[i-380]
+    #       sumB_ls+=light_s[i-380]*Nspcfz[i-380]
+    #   ratio = (sumB_opt)/(sumB_ls)
+    #   print("GsumB_opt"+str(sumB_opt))
+    #   print("GsumB_ls"+str(sumB_ls))
     
-    print("Gratio-"+str(ratio))
+    #print("Gratio-"+str(ratio))
 
     #ratioによるRGBの補正
-    r*=ratio
-    g*=ratio
-    b*=ratio
+    #r*=ratio
+    #g*=ratio
+    #b*=ratio
     # RGB値をHSV値に変換する．
     HSV = colorsys.rgb_to_hsv(r/255,g/255,b/255)
     arr_H = HSV[0]
@@ -742,40 +747,40 @@ def gauss_HSV2(rgbgauss,light_opt,light_s):
     #RGBの受け取り
     r,g,b = rgbgauss
     #辞書の作成
-    d = {'R':r,'G':g,'B':b}
+    #d = {'R':r,'G':g,'B':b}
     #RGBのうちどれが最大化がどれかを参照(同値255,255,255の場合は最初の値..?)
-    getlarge=max(d, key=d.get)  #
+    #getlarge=max(d, key=d.get)  #
     
-    if getlarge=='R':
-        for i in range(380,751): #各λにおける光路差d対応とジョーンズ・マトリクス計算
-            sumR_opt+=light_opt[i-380]*Nspcfx[i-380]
-            sumR_ls+=light_s[i-380]*Nspcfx[i-380]
-        ratio = ((sumR_opt)/(sumR_ls))**(1/2.4)
-        print("GsumR_opt"+str(sumR_opt))
-        print("GsumR_ls"+str(sumR_ls))
-    elif getlarge=='G':
-        for i in range(380,751): #各λにおける光路差d対応とジョーンズ・マトリクス計算
-            sumG_opt+=light_opt[i-380]*Nspcfy[i-380]
-            sumG_ls+=light_s[i-380]*Nspcfy[i-380]
-        ratio = ((sumG_opt)/(sumG_ls))**(1/2.4)
-        print("GsumG_opt"+str(sumG_opt))
-        print("GsumG_ls"+str(sumG_ls))
-    else :
-        for i in range(380,751): #各λにおける光路差d対応とジョーンズ・マトリクス計算
-            sumB_opt+=light_opt[i-380]*Nspcfz[i-380]
-            sumB_ls+=light_s[i-380]*Nspcfz[i-380]
-        ratio = ((sumB_opt)/(sumB_ls))**(1/2.4)
-        print("GsumB_opt"+str(sumB_opt))
-        print("GsumB_ls"+str(sumB_ls))
+    #if getlarge=='R':
+    #    for i in range(380,751): #各λにおける光路差d対応とジョーンズ・マトリクス計算
+    #        sumR_opt+=light_opt[i-380]*Nspcfx[i-380]
+    #        sumR_ls+=light_s[i-380]*Nspcfx[i-380]
+    #    ratio = ((sumR_opt)/(sumR_ls))**(1/2.4)
+    #    print("GsumR_opt"+str(sumR_opt))
+    #    print("GsumR_ls"+str(sumR_ls))
+    #elif getlarge=='G':
+    #    for i in range(380,751): #各λにおける光路差d対応とジョーンズ・マトリクス計算
+    #        sumG_opt+=light_opt[i-380]*Nspcfy[i-380]
+    #        sumG_ls+=light_s[i-380]*Nspcfy[i-380]
+    #    ratio = ((sumG_opt)/(sumG_ls))**(1/2.4)
+    #    print("GsumG_opt"+str(sumG_opt))
+    #    print("GsumG_ls"+str(sumG_ls))
+    #else :
+    #    for i in range(380,751): #各λにおける光路差d対応とジョーンズ・マトリクス計算
+    #        sumB_opt+=light_opt[i-380]*Nspcfz[i-380]
+    #        sumB_ls+=light_s[i-380]*Nspcfz[i-380]
+    #    ratio = ((sumB_opt)/(sumB_ls))**(1/2.4)
+    #    print("GsumB_opt"+str(sumB_opt))
+    #    print("GsumB_ls"+str(sumB_ls))
     
-    print("Gratio-"+str(ratio))
+    #print("Gratio-"+str(ratio))
 
     #ratioによるRGBの補正
-    r*=ratio
-    g*=ratio
-    b*=ratio
+    #r*=ratio
+    #g*=ratio
+    #b*=ratio
     # RGB値をHSV値に変換する．
-  # RGB値をHSV値に変換する．
+# RGB値をHSV値に変換する．
     HSV = colorsys.rgb_to_hsv(r/255,g/255,b/255)
     arr_H = HSV[0]
     arr_S = HSV[1]
@@ -793,7 +798,7 @@ def gauss_HSV2(rgbgauss,light_opt,light_s):
     ax3.set_title(f"H-{theta_pi_str} - S-{arr_S:.2f} - V-{arr_V:.2f}", fontname="Arial", fontsize=20)  # グラフタイトル
     #グラフに円を描写する(ec = edge color)
     c = patches.Circle(xy=(0, 0), radius=1.0,fill=False, ec='r')
-    img = plt.imread("hsv_wheel_transparent.png")
+    img = plt.imread("python-lamination-calculation-mechanism-main/hsv_wheel_transparent.png")
     ax3.imshow(img, extent=[-1, 1, -1, 1], alpha=0.6, zorder=0)
     # グラフに円を追加する．
     ax3.add_patch(c)
@@ -930,12 +935,12 @@ def fitting_color(keepparams):
     arr_spcY = spcY
     arr_spcZ = spcZ
     
-    arr_spcXx = (arr_spcX)/((arr_spcX)+(arr_spcY)+(arr_spcZ))
-    arr_spcYy = (arr_spcY)/((arr_spcX)+(arr_spcY)+(arr_spcZ))
-    arr_spcZz = (arr_spcZ)/((arr_spcX)+(arr_spcY)+(arr_spcZ))
+    #arr_spcXx = (arr_spcX)/((arr_spcX)+(arr_spcY)+(arr_spcZ))
+    #arr_spcYy = (arr_spcY)/((arr_spcX)+(arr_spcY)+(arr_spcZ))
+    #arr_spcZz = (arr_spcZ)/((arr_spcX)+(arr_spcY)+(arr_spcZ))
     ##混色比の行列(3行1列)をE5として作成し，sRGB変換マトリクスとの積を[R"G"B"]配列として算出
-    E_5 = np.array([[arr_spcXx], [arr_spcYy],
-                    [arr_spcZz]])  # [[],[],[]]..?
+    E_5 = np.array([[arr_spcX], [arr_spcY],
+                    [arr_spcZ]])  # [[],[],[]]..?
     arr_RGB = np.dot(tosRGB, E_5)
     arr_RR= arr_RGB[0]
     arr_GG = arr_RGB[1]
@@ -990,20 +995,20 @@ def gauss_color(get_AAA):
     arr_spcY = spcY
     arr_spcZ = spcZ
     
-    denominator = arr_spcX + arr_spcY + arr_spcZ
-    if denominator != 0:
-        arr_spcXx = arr_spcX / denominator
-        arr_spcYy = arr_spcY / denominator
-        arr_spcZz = arr_spcZ / denominator
-    else:
-        arr_spcXx = 0
-        arr_spcYy = 0
-        arr_spcZz = 0
-        print("⚠️ スペクトルがすべてゼロです（正規化できません）")
+    #denominator = arr_spcX + arr_spcY + arr_spcZ
+    #if denominator != 0:
+    #    arr_spcXx = arr_spcX / denominator
+    #    arr_spcYy = arr_spcY / denominator
+    #    arr_spcZz = arr_spcZ / denominator
+    #else:
+    #    arr_spcXx = 0
+    #    arr_spcYy = 0
+    #    arr_spcZz = 0
+    #    print("⚠️ スペクトルがすべてゼロです（正規化できません）")
     
     ##混色比の行列(3行1列)をE5として作成し，sRGB変換マトリクスとの積を[R"G"B"]配列として算出
-    E_5 = np.array([[arr_spcXx], [arr_spcYy],
-                    [arr_spcZz]])  # [[],[],[]]..?
+    E_5 = np.array([[arr_spcX], [arr_spcY],
+                    [arr_spcZ]])  # [[],[],[]]..?
     arr_RGB = np.dot(tosRGB, E_5)
     arr_RR= arr_RGB[0]
     arr_GG = arr_RGB[1]
@@ -1290,7 +1295,6 @@ update_plot()
 
 root.mainloop()
 print("ウィンドウを閉じました")
-
 
 
 
