@@ -559,38 +559,38 @@ def correctional_rgb(rgbnow,light_opt,light_s):
     #RGBの受け取り
     r,g,b = rgbnow
     #辞書の作成
-    d = {'R':r,'G':g,'B':b}
+    #d = {'R':r,'G':g,'B':b}
     #RGBのうちどれが最大化がどれかを参照(同値255,255,255の場合は最初の値..?)
-    getlarge=max(d, key=d.get)  #
-    getlargeRGB=max([r,g,b])
-    if getlarge=='R':
-        for i in range(380,751): #各λにおける光路差d対応とジョーンズ・マトリクス計算
-            sumR_opt+=light_opt[i-380]*Nspcfx[i-380]
-            sumR_ls+=light_s[i-380]*Nspcfx[i-380]
-        ratio = (sumR_opt**(1/2.4))/(sumR_ls**(1/2.4))
-        print("sumR_opt"+str(sumR_opt))
-        print("sumR_ls"+str(sumR_ls))
-    elif getlarge=='G':
-        for i in range(380,751): #各λにおける光路差d対応とジョーンズ・マトリクス計算
-            sumG_opt+=light_opt[i-380]*Nspcfy[i-380]
-            sumG_ls+=light_s[i-380]*Nspcfy[i-380]
-        ratio = (sumG_opt**(1/2.4))/(sumG_ls**(1/2.4))
-        print("sumG_opt"+str(sumG_opt))
-        print("sumG_ls"+str(sumG_ls))
-    else :
-        for i in range(380,751): #各λにおける光路差d対応とジョーンズ・マトリクス計算
-            sumB_opt+=light_opt[i-380]*Nspcfz[i-380]
-            sumB_ls+=light_s[i-380]*Nspcfz[i-380]
-        ratio = (sumB_opt**(1/2.4))/(sumB_ls**(1/2.4))
-        print("sumB_opt"+str(sumB_opt))
-        print("sumB_ls"+str(sumB_ls))
+    #getlarge=max(d, key=d.get)  #
+    #getlargeRGB=max([r,g,b])
+    #if getlarge=='R':
+    #    for i in range(380,751): #各λにおける光路差d対応とジョーンズ・マトリクス計算
+    #        sumR_opt+=light_opt[i-380]*Nspcfx[i-380]
+    #        sumR_ls+=light_s[i-380]*Nspcfx[i-380]
+    #    ratio = (sumR_opt**(1/2.4))/(sumR_ls**(1/2.4))
+    #    print("sumR_opt"+str(sumR_opt))
+    #    print("sumR_ls"+str(sumR_ls))
+    #elif getlarge=='G':
+    #    for i in range(380,751): #各λにおける光路差d対応とジョーンズ・マトリクス計算
+    #        sumG_opt+=light_opt[i-380]*Nspcfy[i-380]
+    #        sumG_ls+=light_s[i-380]*Nspcfy[i-380]
+    #    ratio = (sumG_opt**(1/2.4))/(sumG_ls**(1/2.4))
+    #    print("sumG_opt"+str(sumG_opt))
+    #    print("sumG_ls"+str(sumG_ls))
+    #else :
+    #    for i in range(380,751): #各λにおける光路差d対応とジョーンズ・マトリクス計算
+    #        sumB_opt+=light_opt[i-380]*Nspcfz[i-380]
+    #        sumB_ls+=light_s[i-380]*Nspcfz[i-380]
+    #    ratio = (sumB_opt**(1/2.4))/(sumB_ls**(1/2.4))
+    #    print("sumB_opt"+str(sumB_opt))
+    #    print("sumB_ls"+str(sumB_ls))
     
-    print("ratio-"+str(ratio))
+    #print("ratio-"+str(ratio))
 
     #ratioによるRGBの補正
-    r*=ratio
-    g*=ratio
-    b*=ratio
+    #r*=ratio
+    #g*=ratio
+    #b*=ratio
     colorsrgb=[r, g, b]
     color = [(r/255, g/255, b/255)]
     # RGB値をHSV値に変換する．
